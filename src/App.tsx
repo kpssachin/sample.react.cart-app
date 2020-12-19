@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useMemo } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+// components
+import { BookList } from "./components/BookList";
+import { NavBar } from "./components/NavBar";
+// utils
+import { UserContext } from "./utils/UserContext";
 
 function App() {
+  const [loggedIn, setLogin] = useState(false);
+  const referenceValue = useMemo(() => ({ loggedIn, setLogin }), [
+    loggedIn,
+    setLogin,
+  ]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="container">
+        <NavBar loggedIn={loggedIn} setLogin={setLogin} />
+        <br />
+        <UserContext.Provider value={referenceValue}>
+          <Route path="/" exact component={BookList} />
+        </UserContext.Provider>
+      </div>
+    </Router>
   );
 }
+
+const Person = () => <div>HEllo</div>;
+const Message = () => <div>Document</div>;
 
 export default App;
